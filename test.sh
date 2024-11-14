@@ -4,6 +4,7 @@ TESTS_DIR=$(pwd)/$ROBOT_TESTS_DIR
 sudo mkdir $REPORTS_DIR && sudo chmod 777 $REPORTS_DIR
 
 pwd
+ls
 
 docker run --shm-size=$ALLOWED_SHARED_MEMORY \
   -e BROWSER=$BROWSER \
@@ -12,6 +13,6 @@ docker run --shm-size=$ALLOWED_SHARED_MEMORY \
   -e ROBOT_OPTIONS="$ROBOT_OPTIONS" \
   -v $REPORTS_DIR:/opt/robotframework/reports:Z \
   -v $TESTS_DIR:/opt/robotframework/tests:Z \
-  -v $(pwd)/pip-requirements.txt:/opt/robotframework/pip-requirements.txt:Z \
+  -v $(pwd)/requirements.txt:/opt/robotframework/pip-requirements.txt:Z \
   --user $(id -u):$(id -g) \
   $ROBOT_RUNNER_IMAGE
