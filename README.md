@@ -48,3 +48,4 @@ Available configurations in with block:
 | robot_tests_dir          | 'robot_tests'                       | Location of tests inside repository                  |
 | robot_reports_dir        | 'reports'                           | Location of report output from test execution        |
 | robot_runner_image       | 'ppodgorsek/robot-framework:latest' | Docker image which will be used to execute the tests |
+| robot_resources_dir     | 'Resources'                         | Location of resource files inside repository         |
