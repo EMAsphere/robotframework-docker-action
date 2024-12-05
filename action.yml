@@ -89,6 +89,7 @@ runs:
         mask-password: true
 
     - shell: bash
+      id: robot-test
       run: ${{ github.action_path }}/test.sh
       env:
         ALLOWED_SHARED_MEMORY: ${{ inputs.allowed_shared_memory }}
@@ -109,3 +110,11 @@ runs:
         AWS_BUCKET_NAME: ${{ inputs.s3_reports }}
         AWS_DEFAULT_REGION: ${{ env.AWS_REGION }}
         AWS_RUN_DIR: ${{ inputs.aws_run_dir }}
+
+    - name: Add report URL summary
+      if: inputs.s3_reports != ''
+      shell: bash
+      run: |
+        echo "### Robot Framework Test Report :robot:" >> $GITHUB_STEP_SUMMARY
+        echo "Le rapport de test est disponible à l'URL suivante :" >> $GITHUB_STEP_SUMMARY
+        echo "https://${{ inputs.s3_reports }}.s3.eu-central-1.amazonaws.com/robot-reports/${{ inputs.aws_run_dir }}/report.html" >> $GITHUB_STEP_SUMMARY
