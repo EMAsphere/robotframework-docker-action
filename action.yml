@@ -61,6 +61,9 @@ inputs:
     description: 'Directory where Robot resources files are located in the repository'
     required: true
     default: 'Resources'
+  s3_reports:
+    description: 'S3 bucket name'
+    required: false
 
 
 runs:
@@ -94,3 +97,5 @@ runs:
         ROBOT_REPORTS_DIR: ${{ inputs.robot_reports_dir }}
         ROBOT_RUNNER_IMAGE: ${{ inputs.robot_runner_image }}
         ROBOT_RESOURCES_DIR: ${{ inputs.robot_resources_dir }}
+        AWS_BUCKET_NAME: ${{ inputs.s3_reports }}
+        AWS_DEFAULT_REGION: ${{ env.AWS_REGION }}
