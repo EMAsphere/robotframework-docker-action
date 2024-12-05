@@ -64,6 +64,10 @@ inputs:
   s3_reports:
     description: 'S3 bucket name'
     required: false
+  aws_run_dir:
+    description: 'Directory path in S3 bucket where reports will be uploaded'
+    required: false
+    default: ''
 
 
 runs:
@@ -104,3 +108,4 @@ runs:
         AWS_SESSION_TOKEN: ${{ steps.aws-credentials.outputs.aws-session-token }}
         AWS_BUCKET_NAME: ${{ inputs.s3_reports }}
         AWS_DEFAULT_REGION: ${{ env.AWS_REGION }}
+        AWS_RUN_DIR: ${{ inputs.aws_run_dir }}

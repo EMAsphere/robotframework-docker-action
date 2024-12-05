@@ -26,6 +26,7 @@ docker run --shm-size=$ALLOWED_SHARED_MEMORY \
   -e AWS_SESSION_TOKEN=$AWS_SESSION_TOKEN \
   -e AWS_DEFAULT_REGION=$AWS_DEFAULT_REGION \
   -e AWS_BUCKET_NAME=$AWS_BUCKET_NAME \
+  -e AWS_RUN_DIR=$AWS_RUN_DIR \
   ${AWS_BUCKET_NAME:+-e AWS_UPLOAD_TO_S3="true"} \
   -v $REPORTS_DIR:/opt/robotframework/reports:Z \
   -v $TESTS_DIR:/opt/robotframework/tests/test:Z \
