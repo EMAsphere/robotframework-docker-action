@@ -1,6 +1,13 @@
 # Authenticate with ECR
 aws ecr get-login-password --region eu-central-1 | docker login --username AWS --password-stdin 719882381898.dkr.ecr.eu-central-1.amazonaws.com
 
+# Debug AWS identity and S3 access
+echo "Current AWS identity:"
+aws sts get-caller-identity
+
+echo "Listing S3 bucket content:"
+aws s3 ls s3://$AWS_BUCKET_NAME
+
 # Create reports folder
 REPORTS_DIR=$(pwd)/$ROBOT_REPORTS_DIR
 TESTS_DIR=$(pwd)/$ROBOT_TESTS_DIR
