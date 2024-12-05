@@ -70,11 +70,13 @@ runs:
   using: 'composite'
   steps:
     - name: Configure AWS credentials
+      id: aws-credentials
       uses: aws-actions/configure-aws-credentials@v4
       with:
         aws-region: ${{ env.AWS_REGION }}
         role-to-assume: ${{ env.PROV_ROLE }}
         role-duration-seconds: 3600
+        output-credentials: true
 
     - name: Login to Amazon ECR
       id: login-ecr
@@ -97,5 +99,8 @@ runs:
         ROBOT_REPORTS_DIR: ${{ inputs.robot_reports_dir }}
         ROBOT_RUNNER_IMAGE: ${{ inputs.robot_runner_image }}
         ROBOT_RESOURCES_DIR: ${{ inputs.robot_resources_dir }}
+        AWS_ACCESS_KEY_ID: ${{ steps.aws-credentials.outputs.aws-access-key-id }}
+        AWS_SECRET_ACCESS_KEY: ${{ steps.aws-credentials.outputs.aws-secret-access-key }}
+        AWS_SESSION_TOKEN: ${{ steps.aws-credentials.outputs.aws-session-token }}
         AWS_BUCKET_NAME: ${{ inputs.s3_reports }}
         AWS_DEFAULT_REGION: ${{ env.AWS_REGION }}
