@@ -112,7 +112,7 @@ runs:
         AWS_RUN_DIR: ${{ inputs.aws_run_dir }}
 
     - name: Add report URL summary
-      if: inputs.s3_reports != ''
+      if: ${{ always() && inputs.s3_reports != '' }}
       shell: bash
       run: |
         echo "### Robot Framework Test Report :robot:" >> $GITHUB_STEP_SUMMARY
