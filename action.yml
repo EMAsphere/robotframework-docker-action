@@ -117,6 +117,8 @@ runs:
       run: |
         if [ ${{ steps.robot-test.outputs.robot_exit_code }} -eq 0 ]; then
           STATUS="✅"
+        elif [ ${{ steps.robot-test.outputs.robot_exit_code }} -eq 252 ]; then
+          STATUS="ℹ️"
         else
           STATUS="❗"
         fi
