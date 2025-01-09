@@ -121,24 +121,3 @@ runs:
         AWS_BUCKET_NAME: ${{ inputs.s3_reports }}
         AWS_DEFAULT_REGION: ${{ env.AWS_REGION }}
         AWS_RUN_DIR: ${{ inputs.aws_run_dir }}
-
-    - name: Add report URL summary
-      if: ${{ always() && inputs.s3_reports != '' }}
-      shell: bash
-      run: |
-        if [ ${{ steps.robot-test.outputs.robot_exit_code }} -eq 0 ]; then
-          STATUS="✅"
-          echo "### $STATUS Robot Framework Test Report 🤖" >> $GITHUB_STEP_SUMMARY
-          echo "Test report is available at:" >> $GITHUB_STEP_SUMMARY
-          echo "https://${{ inputs.s3_reports }}.s3.eu-central-1.amazonaws.com/robot-reports/${{ inputs.aws_run_dir }}/report.html" >> $GITHUB_STEP_SUMMARY
-        elif [ ${{ steps.robot-test.outputs.robot_exit_code }} -eq 252 ]; then
-          STATUS="ℹ️"
-          echo "### $STATUS Robot Framework Test Report 🤖" >> $GITHUB_STEP_SUMMARY
-          echo "No tests were executed matching the specified criteria. This is not considered a failure." >> $GITHUB_STEP_SUMMARY
-          echo "No test report is available." >> $GITHUB_STEP_SUMMARY
-        else
-          STATUS="❗"
-          echo "### $STATUS Robot Framework Test Report 🤖" >> $GITHUB_STEP_SUMMARY
-          echo "Test report is available at:" >> $GITHUB_STEP_SUMMARY
-          echo "https://${{ inputs.s3_reports }}.s3.eu-central-1.amazonaws.com/robot-reports/${{ inputs.aws_run_dir }}/report.html" >> $GITHUB_STEP_SUMMARY
-        fi
