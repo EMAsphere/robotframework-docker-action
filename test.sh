@@ -34,8 +34,23 @@ docker run --shm-size=$ALLOWED_SHARED_MEMORY \
 
 ROBOT_EXIT_CODE=$?
 
-# Set the exit code as output
+# Set outputs
 echo "robot_exit_code=$ROBOT_EXIT_CODE" >> $GITHUB_OUTPUT
+
+# Determine test status
+if [ $ROBOT_EXIT_CODE -eq 0 ]; then
+    echo "test_status=PASS" >> $GITHUB_OUTPUT
+elif [ $ROBOT_EXIT_CODE -eq 252 ]; then
+    echo "test_status=NO_TESTS" >> $GITHUB_OUTPUT
+else
+    echo "test_status=FAIL" >> $GITHUB_OUTPUT
+fi
+
+# Set report URL if S3 bucket is configured
+if [ -n "$AWS_BUCKET_NAME" ]; then
+    REPORT_URL="https://${AWS_BUCKET_NAME}.s3.${AWS_DEFAULT_REGION}.amazonaws.com/robot-reports/${AWS_RUN_DIR}/report.html"
+    echo "report_url=${REPORT_URL}" >> $GITHUB_OUTPUT
+fi
 
 if [ $ROBOT_EXIT_CODE -eq 252 ]; then
     echo "::warning::No tests were found matching the specified criteria. This is not considered a failure."

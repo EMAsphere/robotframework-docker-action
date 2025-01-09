@@ -37,6 +37,33 @@ Available configurations in with block:
 
 | Name                     | Default                             | Description                                          |
 | ------------------------ | ----------------------------------- | ---------------------------------------------------- |
+
+Available outputs:
+
+| Name           | Description                                          | Values                    |
+| -------------- | ---------------------------------------------------- | ------------------------- |
+| robot_exit_code| Exit code from Robot Framework execution             | Integer (0=success)       |
+| test_status    | Status of the test execution                         | PASS/FAIL/NO_TESTS        |
+| report_url     | URL of the test report in S3 (if S3 is configured)  | URL string or empty       |
+
+Example usage with outputs:
+
+```yaml
+steps:
+  - name: Run Robot Tests
+    id: robot_tests
+    uses: emasphere/robotframework-docker-action@master
+    
+  - name: Use Test Results
+    run: |
+      echo "Test Status: ${{ steps.robot_tests.outputs.test_status }}"
+      echo "Report URL: ${{ steps.robot_tests.outputs.report_url }}"
+```
+
+Configuration options:
+
+| Name                     | Default                             | Description                                          |
+| ------------------------ | ----------------------------------- | ---------------------------------------------------- |
 | allowed_shared_memory    | '1g'                                | How much container can use shared memory             |
 | browser                  | 'chrome'                            | Available options chrome / firefox                   |
 | robot_threads            | 1                                   | Change this > 1 if you want to run tests in parallel |

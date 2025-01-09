@@ -1,6 +1,17 @@
 name: 'Robot Framework'
 description: 'Run Robot Framework tests'
 
+outputs:
+  robot_exit_code:
+    description: "Exit code from Robot Framework execution"
+    value: ${{ steps.robot-test.outputs.robot_exit_code }}
+  test_status:
+    description: "Status of the test execution (PASS/FAIL/NO_TESTS)"
+    value: ${{ steps.robot-test.outputs.test_status }}
+  report_url:
+    description: "URL of the test report in S3"
+    value: ${{ steps.robot-test.outputs.report_url }}
+
 permissions:
   contents: write
   id-token: write
