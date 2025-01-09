@@ -34,6 +34,9 @@ docker run --shm-size=$ALLOWED_SHARED_MEMORY \
 
 ROBOT_EXIT_CODE=$?
 
+# Set the exit code as output
+echo "robot_exit_code=$ROBOT_EXIT_CODE" >> $GITHUB_OUTPUT
+
 if [ $ROBOT_EXIT_CODE -eq 252 ]; then
     echo "::warning::No tests were found matching the specified criteria. This is not considered a failure."
     exit 0

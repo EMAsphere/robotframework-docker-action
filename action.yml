@@ -115,6 +115,11 @@ runs:
       if: ${{ always() && inputs.s3_reports != '' }}
       shell: bash
       run: |
-        echo "### Robot Framework Test Report :robot:" >> $GITHUB_STEP_SUMMARY
+        if [ ${{ steps.robot-test.outputs.robot_exit_code }} -eq 0 ]; then
+          STATUS="✅"
+        else
+          STATUS="❗"
+        fi
+        echo "### $STATUS Robot Framework Test Report 🤖" >> $GITHUB_STEP_SUMMARY
         echo "Le rapport de test est disponible à l'URL suivante :" >> $GITHUB_STEP_SUMMARY
         echo "https://${{ inputs.s3_reports }}.s3.eu-central-1.amazonaws.com/robot-reports/${{ inputs.aws_run_dir }}/report.html" >> $GITHUB_STEP_SUMMARY
