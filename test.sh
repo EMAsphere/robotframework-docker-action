@@ -31,3 +31,13 @@ docker run --shm-size=$ALLOWED_SHARED_MEMORY \
   -v $(pwd)/requirements-linux.txt:/opt/robotframework/pip-requirements.txt:Z \
   --user $(id -u):$(id -g) \
   $ROBOT_RUNNER_IMAGE
+
+ROBOT_EXIT_CODE=$?
+
+if [ $ROBOT_EXIT_CODE -eq 252 ]; then
+    echo "::warning::No tests were found matching the specified criteria. This is not considered a failure."
+    exit 0
+elif [ $ROBOT_EXIT_CODE -ne 0 ]; then
+    echo "::error::Robot Framework tests failed with exit code $ROBOT_EXIT_CODE"
+    exit $ROBOT_EXIT_CODE
+fi
