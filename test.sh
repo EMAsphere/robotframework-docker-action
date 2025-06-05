@@ -15,6 +15,7 @@ if [ -n "$QASE_API_TOKEN" ] && [ -n "$QASE_PROJECT_CODE" ]; then
     echo "🔗 Qase integration enabled"
     echo "📊 Project: $QASE_PROJECT_CODE"
     echo "🌐 Host: ${QASE_HOST:-qase.io}"
+    echo "🔐 API token length: ${#QASE_API_TOKEN} characters"
     echo "⚙️  Creating Qase configuration..."
     cat > qase.config.json << EOF
 {
