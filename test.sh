@@ -12,7 +12,10 @@ sudo mkdir $REPORTS_DIR && sudo chmod 777 $REPORTS_DIR
 
 # Create Qase configuration if API token is provided
 if [ -n "$QASE_API_TOKEN" ] && [ -n "$QASE_PROJECT_CODE" ]; then
-    echo "Creating Qase configuration..."
+    echo "🔗 Qase integration enabled"
+    echo "📊 Project: $QASE_PROJECT_CODE"
+    echo "🌐 Host: ${QASE_HOST:-qase.io}"
+    echo "⚙️  Creating Qase configuration..."
     cat > qase.config.json << EOF
 {
   "mode": "testops",
@@ -25,9 +28,12 @@ if [ -n "$QASE_API_TOKEN" ] && [ -n "$QASE_PROJECT_CODE" ]; then
   }
 }
 EOF
+    echo "✅ Qase configuration created successfully"
     QASE_CONFIG_VOLUME="-v $(pwd)/qase.config.json:/opt/robotframework/qase.config.json:Z"
     QASE_LISTENER="--listener qase.robotframework.Listener"
+    echo "📋 Qase listener will be attached to Robot Framework execution"
 else
+    echo "ℹ️  Qase integration disabled (no API token or project code provided)"
     QASE_CONFIG_VOLUME=""
     QASE_LISTENER=""
 fi
@@ -51,6 +57,10 @@ docker run --shm-size=$ALLOWED_SHARED_MEMORY \
   -e AWS_BUCKET_NAME=$AWS_BUCKET_NAME \
   -e AWS_RUN_DIR=$AWS_RUN_DIR \
   ${AWS_BUCKET_NAME:+-e AWS_UPLOAD_TO_S3="true"} \
+  ${QASE_API_TOKEN:+-e QASE_MODE="testops"} \
+  ${QASE_API_TOKEN:+-e QASE_TESTOPS_API_TOKEN="$QASE_API_TOKEN"} \
+  ${QASE_PROJECT_CODE:+-e QASE_TESTOPS_PROJECT="$QASE_PROJECT_CODE"} \
+  ${QASE_HOST:+-e QASE_TESTOPS_HOST="$QASE_HOST"} \
   -v $REPORTS_DIR:/opt/robotframework/reports:Z \
   -v $TESTS_DIR:/opt/robotframework/tests/test:Z \
   -v $(pwd)/$ROBOT_RESOURCES_DIR:/opt/robotframework/$ROBOT_RESOURCES_DIR:Z \
@@ -60,6 +70,11 @@ docker run --shm-size=$ALLOWED_SHARED_MEMORY \
   $ROBOT_RUNNER_IMAGE
 
 ROBOT_EXIT_CODE=$?
+
+# Log Qase reporting status
+if [ -n "$QASE_API_TOKEN" ] && [ -n "$QASE_PROJECT_CODE" ]; then
+    echo "📤 Qase test results should have been reported to project: $QASE_PROJECT_CODE"
+fi
 
 # Set outputs
 echo "robot_exit_code=$ROBOT_EXIT_CODE" >> $GITHUB_OUTPUT
