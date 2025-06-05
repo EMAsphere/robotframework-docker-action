@@ -131,6 +131,6 @@ runs:
         AWS_BUCKET_NAME: ${{ inputs.s3_reports }}
         AWS_DEFAULT_REGION: ${{ env.AWS_REGION }}
         AWS_RUN_DIR: ${{ inputs.aws_run_dir }}
-        QASE_API_TOKEN: ${{ inputs.qase_api_token || secrets.QASE_API_TOKEN }}
+        QASE_API_TOKEN: ${{ inputs.qase_api_token }}
         QASE_PROJECT_CODE: ${{ inputs.qase_project_code }}
         QASE_HOST: ${{ inputs.qase_host }}
