@@ -79,6 +79,16 @@ inputs:
     description: 'Directory path in S3 bucket where reports will be uploaded'
     required: false
     default: ''
+  qase_api_token:
+    description: 'Qase API token for test reporting (optional)'
+    required: false
+  qase_project_code:
+    description: 'Qase project code for test reporting (optional)'
+    required: false
+  qase_host:
+    description: 'Qase host URL'
+    required: false
+    default: 'qase.io'
 
 
 runs:
@@ -121,3 +131,6 @@ runs:
         AWS_BUCKET_NAME: ${{ inputs.s3_reports }}
         AWS_DEFAULT_REGION: ${{ env.AWS_REGION }}
         AWS_RUN_DIR: ${{ inputs.aws_run_dir }}
+        QASE_API_TOKEN: ${{ inputs.qase_api_token || secrets.QASE_API_TOKEN }}
+        QASE_PROJECT_CODE: ${{ inputs.qase_project_code }}
+        QASE_HOST: ${{ inputs.qase_host }}

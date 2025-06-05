@@ -10,6 +10,28 @@ REPORTS_DIR=$(pwd)/$ROBOT_REPORTS_DIR
 TESTS_DIR=$(pwd)/$ROBOT_TESTS_DIR
 sudo mkdir $REPORTS_DIR && sudo chmod 777 $REPORTS_DIR
 
+# Create Qase configuration if API token is provided
+if [ -n "$QASE_API_TOKEN" ] && [ -n "$QASE_PROJECT_CODE" ]; then
+    echo "Creating Qase configuration..."
+    cat > qase.config.json << EOF
+{
+  "mode": "testops",
+  "testops": {
+    "project": "$QASE_PROJECT_CODE",
+    "api": {
+      "token": "$QASE_API_TOKEN",
+      "host": "$QASE_HOST"
+    }
+  }
+}
+EOF
+    QASE_CONFIG_VOLUME="-v $(pwd)/qase.config.json:/opt/robotframework/qase.config.json:Z"
+    QASE_LISTENER="--listener qase.robotframework.Listener"
+else
+    QASE_CONFIG_VOLUME=""
+    QASE_LISTENER=""
+fi
+
 pwd
 ls
 
@@ -17,7 +39,7 @@ docker run --shm-size=$ALLOWED_SHARED_MEMORY \
   -e BROWSER=$BROWSER \
   -e ROBOT_THREADS=$ROBOT_THREADS \
   -e PABOT_OPTIONS="$PABOT_OPTIONS" \
-  -e ROBOT_OPTIONS="$ROBOT_OPTIONS" \
+  -e ROBOT_OPTIONS="$ROBOT_OPTIONS $QASE_LISTENER" \
   -e AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID \
   -e AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY \
   -e AWS_SESSION_TOKEN=$AWS_SESSION_TOKEN \
@@ -33,6 +55,7 @@ docker run --shm-size=$ALLOWED_SHARED_MEMORY \
   -v $TESTS_DIR:/opt/robotframework/tests/test:Z \
   -v $(pwd)/$ROBOT_RESOURCES_DIR:/opt/robotframework/$ROBOT_RESOURCES_DIR:Z \
   -v $(pwd)/requirements-linux.txt:/opt/robotframework/pip-requirements.txt:Z \
+  $QASE_CONFIG_VOLUME \
   --user $(id -u):$(id -g) \
   $ROBOT_RUNNER_IMAGE
 
