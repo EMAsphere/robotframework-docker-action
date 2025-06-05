@@ -89,6 +89,9 @@ inputs:
     description: 'Qase host URL'
     required: false
     default: 'qase.io'
+  qase_environment:
+    description: 'Qase environment for test reporting (optional)'
+    required: false
 
 
 runs:
@@ -134,3 +137,4 @@ runs:
         QASE_API_TOKEN: ${{ inputs.qase_api_token }}
         QASE_PROJECT_CODE: ${{ inputs.qase_project_code }}
         QASE_HOST: ${{ inputs.qase_host }}
+        QASE_ENVIRONMENT: ${{ inputs.qase_environment }}

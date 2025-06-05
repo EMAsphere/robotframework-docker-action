@@ -62,6 +62,7 @@ docker run --shm-size=$ALLOWED_SHARED_MEMORY \
   ${QASE_API_TOKEN:+-e QASE_TESTOPS_API_TOKEN="$QASE_API_TOKEN"} \
   ${QASE_PROJECT_CODE:+-e QASE_TESTOPS_PROJECT="$QASE_PROJECT_CODE"} \
   ${QASE_HOST:+-e QASE_TESTOPS_HOST="$QASE_HOST"} \
+  ${QASE_ENVIRONMENT:+-e QASE_ENVIRONMENT="$QASE_ENVIRONMENT"} \
   -v $REPORTS_DIR:/opt/robotframework/reports:Z \
   -v $TESTS_DIR:/opt/robotframework/tests/test:Z \
   -v $(pwd)/$ROBOT_RESOURCES_DIR:/opt/robotframework/$ROBOT_RESOURCES_DIR:Z \
